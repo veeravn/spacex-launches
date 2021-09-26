@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -10,11 +10,8 @@ import (
 	"github.com/machinebox/graphql"
 )
 
-// func (data SpacexLauchesPast) spacexLauchesPast() SpacexLauchesPast {
-// 	return data
-// }
-
 func handler(w http.ResponseWriter, r *http.Request) {
+	//create graphql client
 	graphqlClient := graphql.NewClient("https://api.spacex.land/graphql/")
 	graphqlRequest := graphql.NewRequest(`
     {
@@ -61,12 +58,42 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	for i, key := range resp.LaunchesPast {
-		fmt.Fprintf(w, "%d %s", i, key.LaunchSite.SiteNameLong)
+		if i == 0 {
+			w.Write([]byte("["))
+		}
+		bytes := serializeJSON(key)
+		w.Write(bytes)
+		if i == len(resp.LaunchesPast)-1 {
+			w.Write([]byte("]"))
+		} else {
+			w.Write([]byte(","))
+		}
 	}
+}
+func serializeJSON(key LaunchesPast) []byte {
+	bytes, err := json.Marshal(LaunchesPastTable{
+		SiteNameLong: key.LaunchSite.SiteNameLong,
+		MissionName:  key.MissionName,
+		RocketName:   key.Rocket.RocketName,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return bytes
 }
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/", handler).Methods("GET")
+
+	// Declare the static file directory
+	staticFileDirectory := http.Dir("./assets/")
+	// Declare the handler, that routes requests to their respective filename.
+	// The fileserver is wrapped in the `stripPrefix` method, because we want to
+	// remove the "/assets/" prefix when looking for files.
+	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(staticFileDirectory))
+	// The "PathPrefix" method acts as a matcher, and matches all routes starting
+	// with "/assets/", instead of the absolute route itself
+	r.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
+	r.HandleFunc("/launchesPast", handler).Methods("GET")
 	return r
 }
 func main() {
