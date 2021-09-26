@@ -7,6 +7,10 @@ import (
 	"github.com/machinebox/graphql"
 )
 
+// func (data SpacexLauchesPast) spacexLauchesPast() SpacexLauchesPast {
+// 	return data
+// }
+
 func main() {
 	graphqlClient := graphql.NewClient("https://api.spacex.land/graphql/")
 	graphqlRequest := graphql.NewRequest(`
@@ -48,9 +52,13 @@ ships {
 }
 }
     `)
-	var graphqlResponse interface{}
-	if err := graphqlClient.Run(context.Background(), graphqlRequest, &graphqlResponse); err != nil {
+	ctx := context.Background()
+	resp := Data{}
+	if err := graphqlClient.Run(ctx, graphqlRequest, &resp); err != nil {
 		panic(err)
 	}
-	fmt.Println(graphqlResponse)
+
+	for i, key := range resp.LaunchesPast {
+		fmt.Println(i, key.LaunchSite.SiteNameLong)
+	}
 }
