@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/machinebox/graphql"
 )
@@ -11,21 +13,21 @@ import (
 // 	return data
 // }
 
-func main() {
+func handler(w http.ResponseWriter, r *http.Request) {
 	graphqlClient := graphql.NewClient("https://api.spacex.land/graphql/")
 	graphqlRequest := graphql.NewRequest(`
     {
-launchesPast(limit: 10) {
-mission_name
-launch_date_local
-launch_site {
+  launchesPast(limit: 10) {
+  mission_name
+  launch_date_local
+  launch_site {
   site_name_long
-}
-links {
+  }
+  links {
   article_link
   video_link
-}
-rocket {
+  }
+  rocket {
   rocket_name
   first_stage {
     cores {
@@ -43,22 +45,25 @@ rocket {
       payload_mass_lbs
     }
   }
-}
-ships {
+  }
+  ships {
   name
   home_port
   image
-}
-}
-}
+  }
+  }
+  }
     `)
 	ctx := context.Background()
-	resp := Data{}
+	var resp = Data{}
 	if err := graphqlClient.Run(ctx, graphqlRequest, &resp); err != nil {
 		panic(err)
 	}
-
 	for i, key := range resp.LaunchesPast {
-		fmt.Println(i, key.LaunchSite.SiteNameLong)
+		fmt.Fprintf(w, "%d %s", i, key.LaunchSite.SiteNameLong)
 	}
+}
+func main() {
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
