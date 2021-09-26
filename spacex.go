@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/machinebox/graphql"
 )
 
@@ -63,7 +64,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%d %s", i, key.LaunchSite.SiteNameLong)
 	}
 }
+func newRouter() *mux.Router {
+	r := mux.NewRouter()
+	r.HandleFunc("/", handler).Methods("GET")
+	return r
+}
 func main() {
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	r := newRouter()
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
