@@ -36,7 +36,7 @@ type FirstStage struct {
 //Payloads type
 type Payloads struct {
 	PayloadType    string  `json:"payload_type"`
-	PayloadMassKg  int     `json:"payload_mass_kg"`
+	PayloadMassKg  float64 `json:"payload_mass_kg"`
 	PayloadMassLbs float64 `json:"payload_mass_lbs"`
 }
 
@@ -78,4 +78,8 @@ type LaunchesPastTable struct {
 	MissionName  string
 	SiteNameLong string
 	RocketName   string
+}
+type SpaceXQueryForm struct {
+	Limit  int
+	Offset int
 }
