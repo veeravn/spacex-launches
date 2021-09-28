@@ -75,7 +75,7 @@
                         this.newQuery = {}
                         return
                     }
-                    this.$http.get('/launchesPast', this.newQuery).then(function(response) {
+                    this.$http.get('/launchesPast', {params:  {limit: this.newQuery.limit, offset: this.newQuery.offset}}).then(function(response) {
                         console.log(status)
                         console.log(response)
                         if(response.status == 200) {
