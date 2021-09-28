@@ -20,19 +20,26 @@
       <!-- Vue.js -->
       <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.3/vue-resource.min.js" integrity="sha512-SzBVU+C0eJl+4BIg29X72SYgYNUI2bNVVUFfG9eg1g2jOMvBy3w2movesVS0u+IslOgFyRxuVrMrSHcnLPLN+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+        <style>
+            .table {
+                margin: 0 auto
+            }
+            .col-sm-4 {
+                margin: auto
+            }
+        </style>
     </head>
 
     <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
-                <h2>Spacex Launches Past</h2>
-                <table class="table" >
+            <div class="col">
+                <h2 class="text-center">Spacex Launches Past</h2>
+                <table class="table table-striped w-auto" >
                     <thead>
-                    <th scope="col">Mission Name</th>
-                    <th scope="col">Launch Site</th>
-                    <th scope="col">Rocket Name</th>
+                    <th scope="col" class="text-center">Mission Name</th>
+                    <th scope="col" class="text-center">Launch Site</th>
+                    <th scope="col" class="text-center">Rocket Name</th>
                     </thead>
                     <tbody>
                     <tr scope="row" v-for="launch in launches">
@@ -42,10 +49,13 @@
                     </tr>
                     </tbody>
                 </table>
-                <div class="input-group">
+                <br>
+                <div class="col-sm-4 col-sm-offset-4">
+                    <div class="input-group">
                     <input type="text" class="form-control" placeholder="Limit" v-model="newQuery.limit">
                     <input type="text" class="form-control" placeholder="Offset" v-model="newQuery.offset">
                     <button class="btn btn-primary" type="button" v-on:click="getLaunches">Submit</button>
+                </div>
                 </div><!-- /input-group -->
             </div>
         </div>
