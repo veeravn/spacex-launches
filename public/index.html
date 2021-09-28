@@ -1,88 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 
-<head>
- <title>Spacex Launches Past</title>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+    <head>
+     <title>Spacex Launches Past</title>
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css"
-        integrity="sha512-P9vJUXK+LyvAzj8otTOKzdfF1F3UYVl13+F8Fof8/2QNb8Twd6Vb+VD52I7+87tex9UXxnzPgWA3rH96RExA7A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <!-- Font Awesome -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css"
+            integrity="sha512-P9vJUXK+LyvAzj8otTOKzdfF1F3UYVl13+F8Fof8/2QNb8Twd6Vb+VD52I7+87tex9UXxnzPgWA3rH96RExA7A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!-- JQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+      <!-- JQuery -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
 
-  <!-- Vue.js -->
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.19/vue.cjs.min.js" integrity="sha512-2ftG6Hks6q07Ca+h8f4WCFWQAZca6bm1klWMAFGev51hiusd6FFaRT+kFWcj1G2KjFgZrns1CuwR8eA4OA0zLw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.3/vue-resource.min.js" integrity="sha512-SzBVU+C0eJl+4BIg29X72SYgYNUI2bNVVUFfG9eg1g2jOMvBy3w2movesVS0u+IslOgFyRxuVrMrSHcnLPLN+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <!-- Vue.js -->
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.3/vue-resource.min.js" integrity="sha512-SzBVU+C0eJl+4BIg29X72SYgYNUI2bNVVUFfG9eg1g2jOMvBy3w2movesVS0u+IslOgFyRxuVrMrSHcnLPLN+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-</head>
+    </head>
 
-<body>
-  <h1>Spacex Launches Past</h1>
-  <!--
-    This section of the document specifies the table that will
-    be used to display the list of birds and their description
-   -->
-  <table>
-    <tr>
-      <th>Mission Name</th>
-      <th>Launch Site</th>
-      <th>Rocket Name</th>
-    </tr>
-  </table>
-  <br/>
+    <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Spacex Launches Past</h2>
+                <table class="table" >
+                    <thead>
+                    <th scope="col">Mission Name</th>
+                    <th scope="col">Launch Site</th>
+                    <th scope="col">Rocket Name</th>
+                    </thead>
+                    <tbody>
+                    <tr scope="row" v-for="launch in launches">
+                        <td>{{launch.MissionName}}</td>
+                        <td>{{launch.SiteNameLong}}</td>
+                        <td>{{launch.RocketName}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Limit" v-model="newQuery.limit">
+                    <input type="text" class="form-control" placeholder="Offset" v-model="newQuery.offset">
+                    <button class="btn btn-primary" type="button" v-on:click="getLaunches">Submit</button>
+                </div><!-- /input-group -->
+            </div>
+        </div>
+    </div>
+    <!--
+        Finally, the last section is the script that will
+        run on each page load to fetch the list of birds
+        and add them to our existing table
+    -->
+    <script>
+        new Vue({
+            el: 'body',
 
-  <!--
-    This section contains the form, that will be used to hit the
-    `POST /bird` API that we will build in the next section
-   -->
-  <form action="/launchesPast" method="get">
-    Limit:
-    <input type="text" name="limit">
-    <br/> offset:
-    <input type="text" name="offset">
-    <br/>
-    <input type="submit" value="Submit">
-  </form>
-
-  <!--
-    Finally, the last section is the script that will
-    run on each page load to fetch the list of birds
-    and add them to our existing table
-   -->
-  <script>
-    launchesTable = document.querySelector("table")
-
-    fetch("/launchesPast")
-      .then(response => response.json())
-      .then(lauchesPast => {
-        //Once we fetch the list, we iterate over it
-        lauchesPast.forEach(launch => {
-          // Create the table row
-          row = document.createElement("tr")
-
-          // Create the table data elements for the species and
-					// description columns
-          missionName = document.createElement("td")
-          missionName.innerHTML = launch.MissionName
-          siteName = document.createElement("td")
-          siteName.innerHTML = launch.SiteNameLong
-          rocketName = document.createElement("td")
-          rocketName.innerHTML = launch.RocketName
-          // Add the data elements to the row
-          row.appendChild(missionName)
-          row.appendChild(siteName)
-          row.appendChild(rocketName)
-          // Finally, add the row element to the table itself
-          launchesTable.appendChild(row)
+            data: {
+                launches: [],
+                newQuery: {}
+            },
+            queryLaunches: function() {
+                // Use the vue-resource $http client to fetch data from the /lauchesPast route
+                this.$http.get('/lauchesPast').then(function(response) {
+                    this.launches = response.body ? response.body : []
+                })
+            },
+            methods: {
+                getLaunches: function() {
+                    if (!$.trim(this.newQuery.limit) && !$.trim(this.newQuery.offset)) {
+                        this.newQuery = {}
+                        return
+                    }
+                    this.$http.get('/launchesPast', this.newQuery).then(function(response) {
+                        console.log(status)
+                        console.log(response)
+                        if(response.status == 200) {
+                            this.launches = response.body
+                            this.newQuery = {}
+                        }
+                    });
+                }
+             }
         })
-      })
-  </script>
-</body>
+        </script>
+    </body>
+</html>
