@@ -1,71 +1,75 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 
-    <head>
-     <title>Spacex Launches Past</title>
-      <!-- Latest compiled and minified CSS -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+<head>
+    <title>Spacex Launches Past</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
 
-      <!-- Font Awesome -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css"
-            integrity="sha512-P9vJUXK+LyvAzj8otTOKzdfF1F3UYVl13+F8Fof8/2QNb8Twd6Vb+VD52I7+87tex9UXxnzPgWA3rH96RExA7A=="
-            crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css"
+          integrity="sha512-P9vJUXK+LyvAzj8otTOKzdfF1F3UYVl13+F8Fof8/2QNb8Twd6Vb+VD52I7+87tex9UXxnzPgWA3rH96RExA7A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-      <!-- JQuery -->
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-      <!-- Latest compiled and minified JavaScript -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
 
-      <!-- Vue.js -->
-      <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.3/vue-resource.min.js" integrity="sha512-SzBVU+C0eJl+4BIg29X72SYgYNUI2bNVVUFfG9eg1g2jOMvBy3w2movesVS0u+IslOgFyRxuVrMrSHcnLPLN+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <style>
+    <!-- Vue.js -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.3/vue-resource.min.js"
+            integrity="sha512-SzBVU+C0eJl+4BIg29X72SYgYNUI2bNVVUFfG9eg1g2jOMvBy3w2movesVS0u+IslOgFyRxuVrMrSHcnLPLN+Q=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
             .table {
                 margin: 0 auto
             }
             .col-sm-4 {
                 margin: auto
             }
-        </style>
-    </head>
 
-    <body>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h2 class="text-center">Spacex Launches Past</h2>
-                <table class="table table-striped w-auto" >
-                    <thead>
-                    <th scope="col" class="text-center">Mission Name</th>
-                    <th scope="col" class="text-center">Launch Site</th>
-                    <th scope="col" class="text-center">Rocket Name</th>
-                    </thead>
-                    <tbody>
-                    <tr scope="row" v-for="launch in launches">
-                        <td>{{launch.MissionName}}</td>
-                        <td>{{launch.SiteNameLong}}</td>
-                        <td>{{launch.RocketName}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <br>
-                <div class="col-sm-4 col-sm-offset-4">
-                    <div class="input-group">
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-center">Spacex Launches Past</h2>
+            <table class="table table-striped w-auto">
+                <thead>
+                <th scope="col" class="text-center">Mission Name</th>
+                <th scope="col" class="text-center">Launch Site</th>
+                <th scope="col" class="text-center">Rocket Name</th>
+                </thead>
+                <tbody>
+                <tr scope="row" v-for="launch in launches">
+                    <td>{{launch.MissionName}}</td>
+                    <td>{{launch.SiteNameLong}}</td>
+                    <td>{{launch.RocketName}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="input-group">
                     <input type="text" class="form-control" placeholder="Limit" v-model="newQuery.limit">
                     <input type="text" class="form-control" placeholder="Offset" v-model="newQuery.offset">
                     <button class="btn btn-primary" type="button" v-on:click="getLaunches">Submit</button>
                 </div>
-                </div><!-- /input-group -->
-            </div>
+            </div><!-- /input-group -->
         </div>
     </div>
-    <!--
-        Finally, the last section is the script that will
-        run on each page load to fetch the list of birds
-        and add them to our existing table
-    -->
-    <script>
+</div>
+<!--
+    Finally, the last section is the script that will
+    run on each page load to fetch the list of birds
+    and add them to our existing table
+-->
+<script>
         new Vue({
             el: 'body',
 
@@ -96,6 +100,7 @@
                 }
              }
         })
-        </script>
-    </body>
+
+</script>
+</body>
 </html>
